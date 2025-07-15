@@ -1,0 +1,185 @@
+{
+  "credit_terms": {
+    "신용점수": {
+      "synonyms": ["신용등급", "점수", "등급", "신용", "크레딧스코어", "크레딧점수"],
+      "sql_mapping": "credit_score",
+      "table": "credit_scores",
+      "data_type": "INTEGER",
+      "range": [300, 850],
+      "categories": {
+        "매우높음": [800, 850],
+        "높음": [750, 799],
+        "보통": [650, 749],
+        "낮음": [550, 649],
+        "매우낮음": [300, 549]
+      }
+    },
+    "신용등급": {
+      "synonyms": ["등급", "신용등급", "크레딧등급", "신용레벨"],
+      "sql_mapping": "credit_grade",
+      "table": "credit_scores",
+      "data_type": "VARCHAR",
+      "values": ["AAA", "AA", "A", "BBB", "BB", "B", "CCC", "CC", "C", "D"]
+    },
+    "위험도": {
+      "synonyms": ["리스크", "위험", "위험등급", "리스크레벨", "위험수준"],
+      "sql_mapping": "risk_level",
+      "table": "credit_scores",
+      "data_type": "VARCHAR",
+      "values": ["LOW", "MEDIUM", "HIGH"],
+      "korean_mapping": {
+        "낮음": "LOW",
+        "보통": "MEDIUM",
+        "높음": "HIGH"
+      }
+    }
+  },
+  "business_patterns": {
+    "대출": {
+      "synonyms": ["융자", "차입", "대출금", "대출금액", "차입금"],
+      "sql_mapping": "loan_amount",
+      "table": "loan_history",
+      "data_type": "DECIMAL",
+      "unit": "원",
+      "patterns": {
+        "대출금액": "loan_amount",
+        "대출유형": "loan_type",
+        "이자율": "interest_rate",
+        "대출상태": "status"
+      }
+    },
+    "연체": {
+      "synonyms": ["지연", "연체일수", "지연일수", "연체상태"],
+      "sql_mapping": "days_late",
+      "table": "payment_history",
+      "data_type": "INTEGER",
+      "patterns": {
+        "연체일수": "days_late",
+        "연체금액": "overdue_amount",
+        "연체상태": "overdue_status"
+      }
+    },
+    "소득": {
+      "synonyms": ["수입", "소득수준", "수입수준", "연소득", "월소득"],
+      "sql_mapping": "income_level",
+      "table": "customers",
+      "data_type": "VARCHAR",
+      "values": ["LOW", "MEDIUM", "HIGH"],
+      "korean_mapping": {
+        "낮음": "LOW",
+        "보통": "MEDIUM",
+        "높음": "HIGH"
+      }
+    }
+  },
+  "regulatory_terms": {
+    "개인정보": {
+      "synonyms": ["개인정보보호", "개인정보처리", "개인정보관리"],
+      "sql_mapping": "privacy_level",
+      "table": "customers",
+      "data_type": "VARCHAR",
+      "values": ["PUBLIC", "PRIVATE", "RESTRICTED"]
+    },
+    "신용정보": {
+      "synonyms": ["신용정보업", "신용정보관리", "신용정보처리"],
+      "sql_mapping": "credit_info_level",
+      "table": "credit_scores",
+      "data_type": "VARCHAR"
+    },
+    "내부통제": {
+      "synonyms": ["내부통제기준", "통제", "컨트롤"],
+      "sql_mapping": "internal_control",
+      "table": "customers",
+      "data_type": "VARCHAR"
+    }
+  },
+  "risk_assessment": {
+    "위험도평가": {
+      "synonyms": ["리스크평가", "위험평가", "위험도산정"],
+      "criteria": {
+        "신용점수": {
+          "매우높음": [800, 850],
+          "높음": [750, 799],
+          "보통": [650, 749],
+          "낮음": [550, 649],
+          "매우낮음": [300, 549]
+        },
+        "연체이력": {
+          "없음": 0,
+          "경미": [1, 30],
+          "보통": [31, 90],
+          "심각": [91, 365],
+          "매우심각": [366, 999]
+        },
+        "소득수준": {
+          "높음": "HIGH",
+          "보통": "MEDIUM",
+          "낮음": "LOW"
+        }
+      }
+    },
+    "위험도분류": {
+      "매우낮음": {
+        "synonyms": ["매우낮은위험", "최저위험", "안전"],
+        "sql_value": "VERY_LOW",
+        "score_range": [800, 850]
+      },
+      "낮음": {
+        "synonyms": ["낮은위험", "안전", "양호"],
+        "sql_value": "LOW",
+        "score_range": [700, 799]
+      },
+      "보통": {
+        "synonyms": ["보통위험", "일반", "평균"],
+        "sql_value": "MEDIUM",
+        "score_range": [600, 699]
+      },
+      "높음": {
+        "synonyms": ["높은위험", "위험", "주의"],
+        "sql_value": "HIGH",
+        "score_range": [500, 599]
+      },
+      "매우높음": {
+        "synonyms": ["매우높은위험", "최고위험", "매우위험"],
+        "sql_value": "VERY_HIGH",
+        "score_range": [300, 499]
+      }
+    }
+  },
+  "customer_segments": {
+    "고객유형": {
+      "개인고객": {
+        "synonyms": ["개인", "개인고객", "개인신용", "개인대출"],
+        "sql_value": "INDIVIDUAL",
+        "table": "customers"
+      },
+      "기업고객": {
+        "synonyms": ["기업", "기업고객", "기업신용", "기업대출"],
+        "sql_value": "CORPORATE",
+        "table": "customers"
+      },
+      "소상공인": {
+        "synonyms": ["소상공인", "소상공인고객", "소상공인대출"],
+        "sql_value": "SMALL_BUSINESS",
+        "table": "customers"
+      }
+    },
+    "고객등급": {
+      "VIP": {
+        "synonyms": ["VIP고객", "VIP", "우수고객", "프리미엄고객"],
+        "sql_value": "VIP",
+        "criteria": "신용점수 >= 800"
+      },
+      "일반": {
+        "synonyms": ["일반고객", "일반", "보통고객"],
+        "sql_value": "REGULAR",
+        "criteria": "600 <= 신용점수 < 800"
+      },
+      "관리": {
+        "synonyms": ["관리고객", "관리", "주의고객"],
+        "sql_value": "MANAGED",
+        "criteria": "신용점수 < 600"
+      }
+    }
+  }
+} 

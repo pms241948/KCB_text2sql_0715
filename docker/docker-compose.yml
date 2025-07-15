@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./rag_files:/app/rag_files
+      - ./.env:/app/.env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./public:/app/public
+      - ./src:/app/src
+    restart: unless-stopped 
