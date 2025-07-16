@@ -1,6 +1,8 @@
 # KCB Text2SQL 프로젝트
 
-신용평가기관 내에서 사용할 자연어를 SQL로 변환하는 프로젝트입니다.
+신용평가기관 내에서 사용할 자연어를 SQL로 변환하는 프로젝트
+
+![text2sql구조도](./docs/images/text2xql.drawio.png)
 
 ## 🚀 주요 기능
 
